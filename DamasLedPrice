@@ -1,1 +1,665 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة أسعار شاشات LED - DAMAS LED</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #e74c3c;
+            --accent: #9b59b6;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        
+        .calculator {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            margin: 10px;
+        }
+        
+        .info {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            margin: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        button {
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+        
+        .result h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .price-usd {
+            font-size: 1.8rem;
+            margin: 10px 0;
+            color: #ffeb3b;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        
+        .feature {
+            text-align: center;
+            width: 150px;
+            margin: 10px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .contact {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .contact h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .phones {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .phone {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--dark);
+            color: white;
+        }
+        
+        .price-config {
+            background-color: #e8f4fc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .price-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .price-input {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .price-input label {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .currency-toggle {
+            display: flex;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--primary);
+        }
+        
+        .currency-btn {
+            flex: 1;
+            padding: 8px;
+            text-align: center;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .currency-btn.active {
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .exchange-rate {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .save-prices {
+            background: linear-gradient(to right, var(--success), #27ae60);
+            margin-top: 15px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .calculator, .info {
+                width: 100%;
+                margin: 10px 0;
+            }
+            
+            .price-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DAMAS LED - شاشات LED إعلانية</h1>
+            <p>سِحر الإعلان يخطف الأنظار! لا تُعلِن.. اِحتلَّ العيون!</p>
+        </header>
+        
+        <div class="content">
+            <div class="calculator">
+                <h2>حاسبة أسعار الشاشات</h2>
+                <p>ادخل الأبعاد وعدد الألوان لحساب السعر</p>
+                
+                <div class="form-group">
+                    <label for="width">العرض (سم):</label>
+                    <input type="number" id="width" min="10" placeholder="أدخل العرض بالسنتيمتر">
+                </div>
+                
+                <div class="form-group">
+                    <label for="height">الارتفاع (سم):</label>
+                    <input type="number" id="height" min="10" placeholder="أدخل الارتفاع بالسنتيمتر">
+                </div>
+                
+                <div class="form-group">
+                    <label for="colors">عدد الألوان:</label>
+                    <select id="colors">
+                        <option value="1">لون واحد</option>
+                        <option value="2">لونين</option>
+                        <option value="3">3 ألوان</option>
+                        <option value="full">ألوان كاملة (RGB)</option>
+                    </select>
+                </div>
+                
+                <button onclick="calculatePrice()">احسب السعر</button>
+                
+                <div class="result" id="result">
+                    <h3>التكلفة التقديرية</h3>
+                    <div class="price" id="price">0 ل.س</div>
+                    <div class="price-usd" id="price-usd">0 $</div>
+                    <p>هذا السعر يشمل الشاشة مع التركيب والضمان</p>
+                </div>
+                
+                <div class="price-config">
+                    <h3><i class="fas fa-cog"></i> إعدادات الأسعار (لكل متر مربع)</h3>
+                    
+                    <div class="price-inputs">
+                        <!-- لون واحد -->
+                        <div class="price-input">
+                            <label for="price-single">لون واحد:</label>
+                            <div class="currency-toggle">
+                                <div class="currency-btn active" data-currency="syp" data-target="price-single">ل.س</div>
+                                <div class="currency-btn" data-currency="usd" data-target="price-single">$</div>
+                            </div>
+                            <input type="number" id="price-single" min="1" value="50000">
+                        </div>
+                        
+                        <!-- لونين -->
+                        <div class="price-input">
+                            <label for="price-double">لونين:</label>
+                            <div class="currency-toggle">
+                                <div class="currency-btn active" data-currency="syp" data-target="price-double">ل.س</div>
+                                <div class="currency-btn" data-currency="usd" data-target="price-double">$</div>
+                            </div>
+                            <input type="number" id="price-double" min="1" value="75000">
+                        </div>
+                        
+                        <!-- 3 ألوان -->
+                        <div class="price-input">
+                            <label for="price-triple">3 ألوان:</label>
+                            <div class="currency-toggle">
+                                <div class="currency-btn active" data-currency="syp" data-target="price-triple">ل.س</div>
+                                <div class="currency-btn" data-currency="usd" data-target="price-triple">$</div>
+                            </div>
+                            <input type="number" id="price-triple" min="1" value="100000">
+                        </div>
+                        
+                        <!-- ألوان كاملة -->
+                        <div class="price-input">
+                            <label for="price-full">ألوان كاملة:</label>
+                            <div class="currency-toggle">
+                                <div class="currency-btn active" data-currency="syp" data-target="price-full">ل.س</div>
+                                <div class="currency-btn" data-currency="usd" data-target="price-full">$</div>
+                            </div>
+                            <input type="number" id="price-full" min="1" value="150000">
+                        </div>
+                    </div>
+                    
+                    <div class="exchange-rate">
+                        <h3><i class="fas fa-exchange-alt"></i> سعر صرف الدولار</h3>
+                        <div class="form-group">
+                            <label for="usd-rate">سعر الدولار مقابل الليرة السورية:</label>
+                            <input type="number" id="usd-rate" min="1" value="5000" placeholder="أدخل سعر صرف الدولار">
+                        </div>
+                    </div>
+                    
+                    <button class="save-prices" onclick="savePrices()">حفظ الأسعار وسعر الصرف</button>
+                </div>
+            </div>
+            
+            <div class="info">
+                <h2>مميزات شاشات DAMAS LED</h2>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-tint"></i>
+                        <h3>مقاومة للماء</h3>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-bolt"></i>
+                        <h3>موفرة للطاقة</h3>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-palette"></i>
+                        <h3>متعددة الألوان</h3>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>كفالة حقيقية</h3>
+                    </div>
+                </div>
+                
+                <h3>لمن تصلح شاشاتنا؟</h3>
+                <p>المولات، العيادات، المحلات، المكاتب، البنوك وشركات الصرافة، وأي مكان يريد الظهور!</p>
+                
+                <div class="contact">
+                    <h3>اتصل بنا الآن</h3>
+                    <div class="phones">
+                        <a href="tel:0932308354" class="phone">0932308354</a>
+                        <a href="tel:0944933233" class="phone">0944933233</a>
+                    </div>
+                    <p>نحن متواجدون لخدمتكم على مدار الساعة</p>
+                </div>
+                
+                <div class="price-examples">
+                    <h3>أمثلة على الأسعار (تقريبية)</h3>
+                    <p>● شاشة 50x50 سم لون واحد: 
+                        <span id="example1-syp">25,000 ل.س</span> - 
+                        <span id="example1-usd">5 $</span>
+                    </p>
+                    <p>● شاشة 100x70 سم ألوان كاملة: 
+                        <span id="example2-syp">105,000 ل.س</span> - 
+                        <span id="example2-usd">21 $</span>
+                    </p>
+                    <p>● شاشة 200x100 سم 3 ألوان: 
+                        <span id="example3-syp">200,000 ل.س</span> - 
+                        <span id="example3-usd">40 $</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 DAMAS LED - شاشات LED إعلانية متطورة</p>
+            <p>#شاشات_LED_دمشق #إعلان_ارمات_متحرك #جذب_العملاء</p>
+        </footer>
+    </div>
 
+    <script>
+        // الأسعار الافتراضية لكل متر مربع
+        let prices = {
+            single: 50000,   // لون واحد
+            double: 75000,   // لونين
+            triple: 100000,  // 3 ألوان
+            full: 150000,    // ألوان كاملة
+            usdRate: 5000,   // سعر الصرف الافتراضي
+            // إضافة معلومات العملة لكل سعر
+            currency: {
+                single: "syp",
+                double: "syp",
+                triple: "syp",
+                full: "syp"
+            }
+        };
+        
+        // تحميل الأسعار المحفوظة إذا وجدت
+        function loadPrices() {
+            const savedPrices = localStorage.getItem('ledPrices');
+            if (savedPrices) {
+                const parsedPrices = JSON.parse(savedPrices);
+                prices = {...prices, ...parsedPrices};
+                
+                document.getElementById('price-single').value = prices.single;
+                document.getElementById('price-double').value = prices.double;
+                document.getElementById('price-triple').value = prices.triple;
+                document.getElementById('price-full').value = prices.full;
+                document.getElementById('usd-rate').value = prices.usdRate;
+                
+                // تحديث أزرار العملة
+                updateCurrencyButtons();
+            }
+            updateExamples();
+        }
+        
+        // تحديث أزرار العملة بناءً على البيانات المحفوظة
+        function updateCurrencyButtons() {
+            const types = ['single', 'double', 'triple', 'full'];
+            types.forEach(type => {
+                const buttons = document.querySelectorAll(`[data-target="price-${type}"]`);
+                buttons.forEach(btn => {
+                    if (btn.dataset.currency === prices.currency[type]) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            });
+        }
+        
+        // حفظ الأسعار
+        function savePrices() {
+            // تحديث معلومات العملة أولاً
+            const types = ['single', 'double', 'triple', 'full'];
+            types.forEach(type => {
+                const activeBtn = document.querySelector(`[data-target="price-${type}"].active`);
+                if (activeBtn) {
+                    prices.currency[type] = activeBtn.dataset.currency;
+                }
+            });
+            
+            // تحويل الأسعار المدخلة بالدولار إلى ليرة سورية إذا لزم الأمر
+            types.forEach(type => {
+                const inputValue = parseFloat(document.getElementById(`price-${type}`).value);
+                if (prices.currency[type] === "usd") {
+                    prices[type] = inputValue * prices.usdRate;
+                } else {
+                    prices[type] = inputValue;
+                }
+            });
+            
+            prices.usdRate = parseInt(document.getElementById('usd-rate').value) || 5000;
+            
+            localStorage.setItem('ledPrices', JSON.stringify(prices));
+            alert('تم حفظ الأسعار وسعر الصرف بنجاح!');
+            updateExamples();
+            
+            // تحديث واجهة المستخدم لعرض الأسعار بالليرة السورية
+            document.getElementById('price-single').value = prices.single;
+            document.getElementById('price-double').value = prices.double;
+            document.getElementById('price-triple').value = prices.triple;
+            document.getElementById('price-full').value = prices.full;
+            
+            // تعيين جميع أزرار العملة إلى الليرة السورية
+            const allButtons = document.querySelectorAll('.currency-btn');
+            allButtons.forEach(btn => {
+                if (btn.dataset.currency === "syp") {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // تحديث حالة العملة في الكائن prices
+            types.forEach(type => {
+                prices.currency[type] = "syp";
+            });
+        }
+        
+        // تبديل العملة
+        function toggleCurrency(button) {
+            const target = button.dataset.target;
+            const currency = button.dataset.currency;
+            
+            // إزالة النشاط من جميع الأزرار في نفس المجموعة
+            const buttons = document.querySelectorAll(`[data-target="${target}"]`);
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // إضافة النشاط للزر المحدد
+            button.classList.add('active');
+            
+            // إذا تم التبديل إلى الدولار، تحويل القيمة
+            const input = document.getElementById(target);
+            const currentValue = parseFloat(input.value);
+            const usdRate = parseFloat(document.getElementById('usd-rate').value) || 5000;
+            
+            if (currency === "usd") {
+                // تحويل من ليرة سورية إلى دولار
+                input.value = (currentValue / usdRate).toFixed(2);
+            } else {
+                // تحويل من دولار إلى ليرة سورية
+                input.value = Math.round(currentValue * usdRate);
+            }
+        }
+        
+        // إضافة مستمعي الأحداث لأزرار العملة
+        document.addEventListener('DOMContentLoaded', function() {
+            const currencyButtons = document.querySelectorAll('.currency-btn');
+            currencyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    toggleCurrency(this);
+                });
+            });
+        });
+        
+        // تحديث الأمثلة بناءً على الأسعار الحالية
+        function updateExamples() {
+            // مثال 1: شاشة 50x50 سم لون واحد
+            const area1 = (50 * 50) / 10000; // تحويل إلى متر مربع
+            const example1SYP = Math.round(area1 * prices.single);
+            const example1USD = Math.round(example1SYP / prices.usdRate);
+            
+            document.getElementById('example1-syp').textContent = example1SYP.toLocaleString() + ' ل.س';
+            document.getElementById('example1-usd').textContent = example1USD + ' $';
+            
+            // مثال 2: شاشة 100x70 سم ألوان كاملة
+            const area2 = (100 * 70) / 10000;
+            const example2SYP = Math.round(area2 * prices.full);
+            const example2USD = Math.round(example2SYP / prices.usdRate);
+            
+            document.getElementById('example2-syp').textContent = example2SYP.toLocaleString() + ' ل.س';
+            document.getElementById('example2-usd').textContent = example2USD + ' $';
+            
+            // مثال 3: شاشة 200x100 سم 3 ألوان
+            const area3 = (200 * 100) / 10000;
+            const example3SYP = Math.round(area3 * prices.triple);
+            const example3USD = Math.round(example3SYP / prices.usdRate);
+            
+            document.getElementById('example3-syp').textContent = example3SYP.toLocaleString() + ' ل.س';
+            document.getElementById('example3-usd').textContent = example3USD + ' $';
+        }
+        
+        function calculatePrice() {
+            // الحصول على القيم من المدخلات
+            const width = parseFloat(document.getElementById('width').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const colors = document.getElementById('colors').value;
+            
+            // التحقق من صحة المدخلات
+            if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
+                alert('يرجى إدخال أبعاد صحيحة');
+                return;
+            }
+            
+            // حساب المساحة بالمتر المربع
+            const area = (width * height) / 10000;
+            
+            // تحديد السعر حسب عدد الألوان
+            let pricePerMeter;
+            switch(colors) {
+                case '1':
+                    pricePerMeter = prices.single;
+                    break;
+                case '2':
+                    pricePerMeter = prices.double;
+                    break;
+                case '3':
+                    pricePerMeter = prices.triple;
+                    break;
+                case 'full':
+                    pricePerMeter = prices.full;
+                    break;
+                default:
+                    pricePerMeter = prices.single;
+            }
+            
+            // حساب السعر الإجمالي
+            let totalPriceSYP = area * pricePerMeter;
+            
+            // إضافة تكلفة إضافية للشاشات الصغيرة
+            if (area < 0.1) { // أقل من 0.1م²
+                totalPriceSYP *= 1.2; // زيادة 20% للشاشات الصغيرة
+            } else if (area > 10) { // أكبر من 10م²
+                totalPriceSYP *= 0.9; // خصم 10% للشاشات الكبيرة
+            }
+            
+            // حساب السعر بالدولار
+            const totalPriceUSD = Math.round(totalPriceSYP / prices.usdRate);
+            
+            // عرض النتيجة
+            document.getElementById('price').textContent = Math.round(totalPriceSYP).toLocaleString() + ' ل.س';
+            document.getElementById('price-usd').textContent = totalPriceUSD + ' $';
+            document.getElementById('result').style.display = 'block';
+        }
+        
+        // تحميل الأسعار عند بدء التشغيل
+        window.onload = loadPrices;
+    </script>
+</body>
+</html>
